@@ -43,23 +43,22 @@ class ProdukController extends Controller
         return view('admin.produk.edit', compact('produk'));
     }
 
-    public function update(Request $request, Produk $produk)
+    public function update(Request $request,  $id)
     {
         $validated = $request->validate([
             'nama_bunga' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'deskripsi' => 'nullable|string',
         ]);
-
+        $produk = produk::findOrFail($id);
         if ($request->hasFile('image')) {
             if ($produk->image) {
                 Storage::disk('public')->delete($produk->image);
             }
             
             $imagePath = $request->file('image')->store('flowers', 'public');
-            $validated['image_path'] = $imagePath;
+            $produk->image_path = $imagePath;
         }
 
         $produk->update($validated);

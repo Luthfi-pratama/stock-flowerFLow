@@ -27,7 +27,7 @@ Route::prefix('produk')
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
         Route::get('/edit/{produk}', 'edit')->name('edit');
-        Route::patch('/{produk}', 'update')->name('update');
+        Route::patch('/{id}', 'update')->name('update');
         Route::delete('/{produk}', 'destroy')->name('destroy');
     });
 

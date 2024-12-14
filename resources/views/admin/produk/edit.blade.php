@@ -15,6 +15,7 @@
                 <input type="text" class="form-control @error('nama_bunga') is-invalid @enderror" 
                        id="nama_bunga" 
                        name="nama_bunga" 
+                       value="{{ old('nama_bunga', $produk->nama_bunga) }}"
                        required>
                 @error('nama_bunga')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -26,10 +27,11 @@
                 <div class="input-group">
                     <span class="input-group-text">Rp</span>
                     <input type="number" 
-                           class=" form-control @error('harga') is-invalid @enderror" 
+                           class="form-control @error('harga') is-invalid @enderror" 
                            id="harga" 
                            name="harga" 
                            min="0" 
+                           value="{{ old('harga', $produk->harga) }}"
                            step="1000" 
                            required>
                     @error('harga')
@@ -43,7 +45,7 @@
                 <textarea class="form-control" 
                           id="deskripsi" 
                           name="deskripsi" 
-                          rows="3"></textarea>
+                          rows="3">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
             </div>
 
             <div class="mb-3">
@@ -58,8 +60,8 @@
                 @enderror
                 
                 <div class="mt-2">
-                    <img id="image-preview-edit" src="" alt="Current Image" 
-                         class="img-fluid" style="display:none; max-height: 200px;">
+                    <img id="image-preview-edit" src="{{ asset('storage/' . $produk->image_path) }}" alt="Current Image" 
+                         class="img-fluid" style="max-height: 200px;">
                 </div>
             </div>
 

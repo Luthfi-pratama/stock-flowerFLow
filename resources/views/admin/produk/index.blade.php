@@ -66,6 +66,10 @@
                                                 <button type="button" class="btn btn-warning btn-sm me-2" 
                                                         data-bs-toggle="offcanvas" 
                                                         data-bs-target="#editProductOffcanvas"
+                                                        data-nama-bunga="{{ $produk->nama_bunga }}"
+                                                        data-harga="{{ $produk->harga }}"
+                                                        data-deskripsi="{{ $produk->deskripsi }}"
+                                                        data-image="{{ Storage::url($produk->image_path) }}"
                                                         data-produk-id="{{ $produk->id }}">
                                                     <i class="feather-edit"></i>
                                                 </button>
@@ -96,7 +100,7 @@
 </div>
 
 @include('admin.produk.create')
-<!-- @include('admin.produk.edit') -->
+@include('admin.produk.edit')
 @endsection
 
 @push('scripts')
@@ -114,6 +118,24 @@
                     }
                     reader.readAsDataURL(file);
                 }
+            });
+
+            document.getElementById('editProductOffcanvas').addEventListener('show.bs.offcanvas', function(event) {
+                const button = event.relatedTarget;
+                const namaBunga = button.getAttribute('data-nama-bunga');
+                const harga = button.getAttribute('data-harga');
+                const deskripsi = button.getAttribute('data-deskripsi');
+                const image = button.getAttribute('data-image');
+
+                // Set the values in the form
+                document.getElementById('nama_bunga').value = namaBunga;
+                document.getElementById('harga').value = harga;
+                document.getElementById('deskripsi').value = deskripsi;
+
+                // Set the image preview
+                const imagePreview = document.getElementById('image-preview-edit');
+                imagePreview.src = image;
+                imagePreview.style.display = 'block';
             });
         });
     </script>
