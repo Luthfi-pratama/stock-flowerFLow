@@ -6,34 +6,33 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form action="{{ route('produk.update', $produk->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="editProductForm" action="" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
 
             <div class="mb-3">
-                <label for="nama_bunga" class="form-label">Flower Name</label>
-                <input type="text" class="form-control @error('nama_bunga') is-invalid @enderror" 
-                       id="nama_bunga" 
-                       name="nama_bunga" 
-                       value="{{ old('nama_bunga', $produk->nama_bunga) }}"
-                       required>
+                <label for="edit.nama_bunga" class="form-label">Flower Name</label>
+                <input type="text" 
+                    class="form-control @error('nama_bunga') is-invalid @enderror" 
+                    id="edit.nama_bunga" 
+                    name="nama_bunga" 
+                    required>
                 @error('nama_bunga')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label for="harga" class="form-label">Price</label>
+                <label for="edit.harga" class="form-label">Price</label>
                 <div class="input-group">
                     <span class="input-group-text">Rp</span>
                     <input type="number" 
-                           class="form-control @error('harga') is-invalid @enderror" 
-                           id="harga" 
-                           name="harga" 
-                           min="0" 
-                           value="{{ old('harga', $produk->harga) }}"
-                           step="1000" 
-                           required>
+                        class="form-control @error('harga') is-invalid @enderror" 
+                        id="edit.harga" 
+                        name="harga" 
+                        min="0" 
+                        step="1000" 
+                        required>
                     @error('harga')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -41,27 +40,30 @@
             </div>
 
             <div class="mb-3">
-                <label for="deskripsi" class="form-label">Description (Optional)</label>
-                <textarea class="form-control" 
-                          id="deskripsi" 
-                          name="deskripsi" 
-                          rows="3">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
+                <label for="edit.deskripsi" class="form-label">Description (Optional)</label>
+                <textarea class="form-control @error('deskripsi') is-invalid @enderror" 
+                        id="edit.deskripsi" 
+                        name="deskripsi" 
+                        rows="3"></textarea>
+                @error('deskripsi')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
-                <label for="image-edit" class="form-label">Flower Image (Leave blank to keep current image)</label>
+                <label for="image-edit" class="form-label">Flower Image (Optional)</label>
                 <input type="file" 
-                       class="form-control @error('image') is-invalid @enderror" 
-                       id="image-edit" 
-                       name="image" 
-                       accept="image/jpeg,image/png,image/jpg">
+                    class="form-control @error('image') is-invalid @enderror" 
+                    id="image-edit" 
+                    name="image" 
+                    accept="image/jpeg,image/png,image/jpg">
                 @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                
+
                 <div class="mt-2">
-                    <img id="image-preview-edit" src="{{ asset('storage/' . $produk->image_path) }}" alt="Current Image" 
-                         class="img-fluid" style="max-height: 200px;">
+                    <img id="image-preview-edit" src="" alt="Current Image" 
+                        class="img-fluid" style="max-height: 200px; display: none;">
                 </div>
             </div>
 
@@ -71,5 +73,39 @@
                 </button>
             </div>
         </form>
+
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editProductOffcanvas = document.getElementById('editProductOffcanvas');
+
+            editProductOffcanvas.addEventListener('show.bs.offcanvas', function (event) {
+                const button = event.relatedTarget;
+
+                // Get product data from button attributes
+                const produkId = button.getAttribute('data-produk-id');
+                const namaBunga = button.getAttribute('data-nama-bunga');
+                const harga = button.getAttribute('data-harga');
+                const deskripsi = button.getAttribute('data-deskripsi');
+                const image = button.getAttribute('data-image');
+
+                // Populate form fields
+                document.getElementById('edit.nama_bunga').value = namaBunga;
+                document.getElementById('edit.harga').value = harga;
+                document.getElementById('edit.deskripsi').value = deskripsi;
+
+                // Update image preview
+                const imagePreview = document.getElementById('image-preview-edit');
+                imagePreview.src = image || '';
+                imagePreview.style.display = image ? 'block' : 'none';
+
+                // Update form action
+                const editProductForm = document.getElementById('editProductForm');
+                editProductForm.action = `/produk/${produkId}`;
+            });
+        });
+    </script>
+@endpush

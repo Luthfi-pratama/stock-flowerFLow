@@ -8,10 +8,16 @@ use App\Models\produk;
 class ProdukController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $produks = produk::paginate(10);
-        return view('admin.produk.index', compact('produks'));
+        $search = $request->search??null;
+        $length = $request->length??10;
+
+        $produks = produk::when($search, function ($query) use ($search) {
+            $query->where('nama_bunga', 'like', "%$search%");
+        })->paginate($length);
+
+        return view('admin.produk.index', compact('produks', 'search', 'length'));
     }
     
     public function store(Request $request)
@@ -27,7 +33,7 @@ class ProdukController extends Controller
 
         $produk = Produk::create([
             'nama_bunga' => $validated['nama_bunga'],
-            'rating' => 0,
+            'rating' => 3,
             'harga' => $validated['harga'],
             'deskripsi' => $validated['deskripsi'],
             'image_path' => $imagePath
@@ -37,13 +43,13 @@ class ProdukController extends Controller
             ->with('success', 'Flower product created successfully');
     }
 
-    public function edit(Produk $produk)
+    public function edit($id)
     {
-        dd($produk);
+        $produk = produk::findOrFail($id);
         return view('admin.produk.edit', compact('produk'));
     }
 
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'nama_bunga' => 'required|string|max:255',
@@ -51,25 +57,32 @@ class ProdukController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'deskripsi' => 'nullable|string',
         ]);
-        $produk = produk::findOrFail($id);
+
+        $produk = Produk::findOrFail($id);
+
         if ($request->hasFile('image')) {
-            if ($produk->image) {
-                Storage::disk('public')->delete($produk->image);
+            if ($produk->image_path) {
+                \Storage::disk('public')->delete($produk->image_path);
             }
-            
+
             $imagePath = $request->file('image')->store('flowers', 'public');
             $produk->image_path = $imagePath;
         }
 
-        $produk->update($validated);
+        $produk->update([
+            'nama_bunga' => $validated['nama_bunga'],
+            'harga' => $validated['harga'],
+            'deskripsi' => $validated['deskripsi'] ?? $produk->deskripsi, 
+        ]);
 
         return redirect()->route('produk.index')
-            ->with('success', 'Flower product updated successfully');
+            ->with('success', 'Flower product updated successfully.');
     }
+
 
     public function destroy($id)
     {
-        $produk = Produk::findOrFail($id);
+        $produk = produk::findOrFail($id);
 
         if ($produk->image) {
             Storage::disk('public')->delete($produk->image);

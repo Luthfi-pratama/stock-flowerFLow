@@ -10,7 +10,7 @@
     <div class="navbar-content">
       <ul class="nxl-navbar">
         <li class="nxl-item ">
-         <a href="/dashboard" class="nxl-link">
+         <a href="{{ route('admin.dashboard') }}" class="nxl-link">
             <span class="nxl-micon"><i class="feather-home"></i></span>
             <span class="nxl-mtext">Dashboards</span>
         </a>
