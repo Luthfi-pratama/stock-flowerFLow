@@ -11,12 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// User dashboard (for non-admin users)
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('guest.home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Admin routes
 Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'admin'])
@@ -41,20 +39,6 @@ Route::prefix('admin')
                 Route::patch('/{id}', 'update')->name('update');
                 Route::delete('/{produk}', 'destroy')->name('destroy');
             });
-    });
-
-// Product routes (potentially for both admin and non-admin)
-Route::prefix('produk')
-    ->name('produk.')
-    ->middleware('auth')
-    ->controller(ProdukController::class)
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/edit/{produk}', 'edit')->name('edit');
-        Route::patch('/{id}', 'update')->name('update');
-        Route::delete('/{produk}', 'destroy')->name('destroy');
     });
 
 // Guest routes
