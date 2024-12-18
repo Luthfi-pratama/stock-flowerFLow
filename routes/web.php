@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -48,6 +50,31 @@ Route::prefix('guest')
     ->group(function () {
         Route::get('/', 'home')->name('home');
         Route::post('/', 'catalog')->name('catalog');
+
+        Route::get('/shop', 'shop')->name('shop');
+        Route::get('/about-us', 'about')->name('about');
+    });
+
+Route::prefix('user')
+    ->name('user.')
+    ->middleware(['auth','verified'])
+    ->group(function () {
+        Route::prefix('cart')
+            ->name('cart.')
+            ->controller(CartController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/', 'add')->name('add');
+                Route::delete('/remove/{cartId}', 'remove')->name('remove');
+                Route::patch('/update', 'update')->name('update');
+            });
+        Route::prefix('transaction')
+            ->name('transaction.')
+            ->controller(TransactionController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/placeOrder', 'placeOrder')->name('placeOrder');
+            });
     });
 
 require __DIR__.'/auth.php';

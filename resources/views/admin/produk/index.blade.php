@@ -66,7 +66,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <form method="GET" action="{{ route('produk.index') }}" class="mb-4">
+                    <form method="GET" action="{{ route('admin.produk.index') }}" class="mb-4">
                         <div class="row align-items-center">
                             <div class="col-md-8">
                                 <div class="input-group">
@@ -140,7 +140,7 @@
                                                     data-image="{{ Storage::url($produk->image_path) }}">
                                                     <i class="feather-edit"></i>
                                                 </button>
-                                                <form action="{{ route('produk.destroy', $produk->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                                <form action="{{ route('admin.produk.destroy', $produk->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">

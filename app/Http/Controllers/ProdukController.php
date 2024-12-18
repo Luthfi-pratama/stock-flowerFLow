@@ -39,7 +39,7 @@ class ProdukController extends Controller
             'image_path' => $imagePath
         ]);
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
             ->with('success', 'Flower product created successfully');
     }
 
@@ -75,7 +75,7 @@ class ProdukController extends Controller
             'deskripsi' => $validated['deskripsi'] ?? $produk->deskripsi, 
         ]);
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
             ->with('success', 'Flower product updated successfully.');
     }
 
@@ -84,13 +84,13 @@ class ProdukController extends Controller
     {
         $produk = produk::findOrFail($id);
 
-        if ($produk->image) {
-            Storage::disk('public')->delete($produk->image);
+        if ($produk->image_path) {
+            Storage::disk('public')->delete($produk->image_path);
         }
 
         $produk->delete();
 
-        return redirect()->route('produk.index')
+        return redirect()->route('admin.produk.index')
             ->with('success', 'Flower product deleted successfully');
     }
 }

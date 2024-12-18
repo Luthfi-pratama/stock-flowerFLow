@@ -13,11 +13,12 @@
 
     <title>{{ config('app.name', 'Laravel') }} | @yield('title', 'Dashboard')</title>
 
+    <!-- template duralux -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/vendors.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/theme.min.css') }}">
-
+        
     <style>
         body {
             min-height: 100vh;

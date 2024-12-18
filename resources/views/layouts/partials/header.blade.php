@@ -61,7 +61,7 @@
                 data-bs-auto-close="outside"
               >
                 <img
-                  src="assets/images/avatar/1.png"
+                  src="{{ asset('assets/images/avatar/1.png') }}"
                   alt="user-image"
                   class="img-fluid user-avtar me-0"
                 />
@@ -72,7 +72,7 @@
                 <div class="dropdown-header">
                   <div class="d-flex align-items-center">
                     <img
-                      src="assets/images/avatar/1.png"
+                      src="{{ asset('assets/images/avatar/1.png') }}"
                       alt="user-image"
                       class="img-fluid user-avtar"
                     />
