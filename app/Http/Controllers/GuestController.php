@@ -5,28 +5,36 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\produk;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
 {
     //
-    function home(){
+    function home()
+    {
         if (Auth::check()) {
             $cartItems = Cart::where('user_id', Auth::id())->get();
             $total = $cartItems->sum('quantity');
         } else {
-            $cartItems = collect([]); 
+            $cartItems = collect([]);
             $total = 0;
         }
-        
+
         return view('guest.home', compact('cartItems', 'total'));
     }
 
-    function about(){
+    function about()
+    {
         return view('guest.aboutUs');
     }
 
-    function shop(){
+    function contact()
+    {
+        return view('guest.contactUs');
+    }
+
+    function shop()
+    {
         $produk = produk::paginate(9);
         if (Auth::check()) {
             $cartItems = Cart::where('user_id', Auth::id())->get();

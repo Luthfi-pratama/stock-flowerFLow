@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Route::get('/dashboard', function () {
@@ -23,12 +23,12 @@ Route::prefix('admin')
     ->group(function () {
         // Admin dashboard
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-        
+
         // Admin profile routes
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        
+
         // Admin product routes
         Route::prefix('produk')
             ->name('produk.')
@@ -53,11 +53,12 @@ Route::prefix('guest')
 
         Route::get('/shop', 'shop')->name('shop');
         Route::get('/about-us', 'about')->name('about');
+        Route::get('/contact-us', 'contact')->name('contact');
     });
 
 Route::prefix('user')
     ->name('user.')
-    ->middleware(['auth','verified'])
+    ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::prefix('cart')
             ->name('cart.')
@@ -77,4 +78,4 @@ Route::prefix('user')
             });
     });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
